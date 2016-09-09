@@ -16,10 +16,10 @@ const byte I2C_ADDR = 0x30;    // I2C address
 // connected to the switch machine.
 
 const Triad<byte> pins[] = {
-  Triad<byte>(9, 10, 11),
   Triad<byte>(A0, A1, A2),
-  Triad<byte>(3, 1, 0),
-  Triad<byte>(8, 6, 5)
+  Triad<byte>(9, 10, 11),
+  Triad<byte>(8, 6, 5),
+  Triad<byte>(3, 1, 0)
 };
 
 // Forward reference to I2C handlers.
