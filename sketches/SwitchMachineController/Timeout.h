@@ -19,7 +19,7 @@ class Timeout : public StateMachine
     virtual bool update()
     {
       if (!StateMachine::update()) return false;
-      if (m_timing && ((millis() - m_timeout) >= 0)) {
+      if (m_timing && ((long) (millis() - m_timeout) >= 0)) {
         m_timing = false;
       }
       return true;
