@@ -5,4 +5,4 @@ The SwitchMachineController sketch is written to run on an Adafruit Pro Trinket 
 - refresh all switch machine positions to their stored settings
 - reset all switch machine positions to Main route
 
-The controller activates switch machines in a serial manner so that at most one solenoid is energized at any given moment.  The controller also permits the solenoids to be energized for only 20 millisecods when throwing (or refreshing) the points.  Except during a refresh cycle, a switch machine will not be activated if a received command tries to move the switch machine to the position it's already in.
+The controller activates switch machines in a serial manner so that at most one solenoid is energized at any given moment.  The controller also permits the solenoids to be energized for only 20 milliseconds when throwing (or refreshing) the points.  Except during a refresh cycle, a switch machine will not be activated if a received command tries to move the switch machine to the position it's already in.
