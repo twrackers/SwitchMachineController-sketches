@@ -25,5 +25,5 @@ To install these files:
 The *SwitchMachineController* sketch uses the following libraries.
 
 - *FIFO* library, [https://github.com/twrackers/FIFO](https://github.com/twrackers/FIFO)
-- *StateMachine* library, [http://https://github.com/twrackers/StateMachine-library](http://https://github.com/twrackers/StateMachine-library)
-- *SwitchMachine* library, [http://https://github.com/twrackers/SwitchMachine-library](http://https://github.com/twrackers/SwitchMachine-library) (includes `Triad.h`)
+- *StateMachine* library, [https://github.com/twrackers/StateMachine-library](https://github.com/twrackers/StateMachine-library)
+- *SwitchMachine* library, [https://github.com/twrackers/SwitchMachine-library](https://github.com/twrackers/SwitchMachine-library) (includes `Triad.h`)
