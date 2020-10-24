@@ -13,9 +13,12 @@ The controller activates switch machines in sequence so that at most one solenoi
 
 ## Installation ##
 
-To install this sketch and all its files, clone this repository or download it as a .ZIP file.
-- If you have cloned the repository, rename the top directory from *SwitchMachineController-sketches-main* to *SwitchMachineController*.  Then move the whole directory to wherever you store your Arduino IDE sketches.
-- If you have downloaded the repository in a .ZIP file, rename the .ZIP file in the same way, removing "-sketches-main" from its name.  Then extract all files into a directory named "SwitchMachineController" within your IDE's *sketches* directory.
+To install these files:
+
+1. Find where your Arduino IDE stores sketches.  To do this, in the IDE click *File -> Preferences*.  The "Sketchbook location" is what you want.
+2. From the top page of this repository, [https://github.com/twrackers/SwitchMachineController-sketches](https://github.com/twrackers/SwitchMachineController-sketches), click the green `Code` button, then click `Download ZIP`.
+3. Open the downloaded `.zip` file.  You will see a single directory named `SwitchMachineController-sketches-main`.  Do an `Extract all` into your sketchbook directory.
+4. Rename the directory you just created to simply `SwitchMachineController`.  The Arduino IDE requires that the sketch file (`SwitchMachineController.ino`) be located inside a directory of the same name, without the `.ino` part.
 
 ## Dependencies ##
 
