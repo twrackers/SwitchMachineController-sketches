@@ -1,26 +1,45 @@
+#include <FIFO.h>
 #include <StateMachine.h>
 #include <SwitchMachine.h>
 #include <Triad.h>
-#include <RingBuffer.h>
 
 #include "I2CSlave.h"
 #include "Timeout.h"
 
-const byte I2C_ADDR = 0x30;    // I2C address
+#define PRO_TRINKET
+//#define UNO
 
-// Pin assignments are specific to Adafruit Pro Trinket.
+// Next line must be unique across multiple
+// switch machine controllers.
+const byte I2C_ADDR = 0x32;    // I2C address
+
 // All triads are consecutive pins.
 // The pins should be connected to white/red/black
 // in that order.  White is the enable signal for a
 // channel, while red and black match the pair of wires
 // connected to the switch machine.
 
+#if defined(PRO_TRINKET)
+
+const Triad<byte> pins[] = {
+  Triad<byte>(9, 10, 11),
+  Triad<byte>(A0, A1, A2),
+  Triad<byte>(0, 1, 3),
+  Triad<byte>(5, 6, 8)
+};
+
+#elif defined(UNO)
+
 const Triad<byte> pins[] = {
   Triad<byte>(A0, A1, A2),
-  Triad<byte>(9, 10, 11),
-  Triad<byte>(8, 6, 5),
-  Triad<byte>(3, 1, 0)
+  Triad<byte>(5, 6, 7),
+  Triad<byte>(8, 9, 10),
+  Triad<byte>(11, 12, 13)
 };
+
+#else
+#error Must define either PRO_TRINKET or UNO
+#endif
 
 // Forward reference to I2C handlers.
 void receiveCallback(int);
@@ -30,8 +49,8 @@ I2CSlave i2c(I2C_ADDR, receiveCallback, requestCallback);
 
 const byte NUM_CHANS = sizeof pins / sizeof *pins;
 SwitchMachine* chans[NUM_CHANS];
-RingBuffer cmdBuffer(8);
-RingBuffer opQueue(8);
+FIFO cmdBuffer(8);
+FIFO opQueue(8);
 Timeout timer;
 
 const byte BAD_CHAN = 0xFF;
@@ -67,7 +86,7 @@ void decodeAndQueue(const byte cmdByte)
   
   // The command code is the high 4 bits only.
   byte cmd = cmdByte & 0xF0;
-  
+
   // Decode commands, and queue up operation
   // if command is valid.
   if (cmd == eRefresh) {
