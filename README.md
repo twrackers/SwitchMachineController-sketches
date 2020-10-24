@@ -11,6 +11,10 @@ There are four types of commands recognized:
 
 The controller activates switch machines in sequence so that at most one solenoid is energized at any given moment.  The controller also permits the solenoids to be energized for only 20 milliseconds when throwing (or refreshing) the points.  Except in the case of a refresh cycle, a switch machine will not be activated if a received command tries to move the switch machine to the position it's already in.
 
+## Installation ##
+
+To install this sketch and all its files, clone this repository or download it as a .ZIP file.
+
 ## Dependencies ##
 
 The *SwitchMachineController* sketch uses the following libraries.
