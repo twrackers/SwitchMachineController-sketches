@@ -3,7 +3,7 @@
 #include <SwitchMachine.h>
 #include <Triad.h>
 
-#include "I2CSlave.h"
+#include "I2CDevice.h"
 #include "Timeout.h"
 
 #define PRO_TRINKET
@@ -45,7 +45,7 @@ const Triad<byte> pins[] = {
 void receiveCallback(int);
 void requestCallback();
 
-I2CSlave i2c(I2C_ADDR, receiveCallback, requestCallback);
+I2CDevice i2c(I2C_ADDR, receiveCallback, requestCallback);
 
 const byte NUM_CHANS = sizeof pins / sizeof *pins;
 SwitchMachine* chans[NUM_CHANS];
@@ -65,8 +65,8 @@ byte decodeChan(const byte chan)
 }
 
 // I2C Receive Handler, called when
-// this I2C slave receives bytes from
-// the I2C master.  Is passed the number
+// this I2C device receives bytes from
+// the I2C controller.  Is passed the number
 // of bytes in the received I2C transaction
 // (not used, all commands are 1 byte long).
 void receiveCallback(int i)

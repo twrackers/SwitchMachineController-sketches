@@ -2,7 +2,7 @@
 #define _SWITCH_MACHINE_CMDS__H_
 
 // NOTE: A copy of this file also exists under
-// the I2C_Master sketch.  Both must
+// the I2C_Controller sketch.  Both must
 // contain the same content.
 
 // Each command code has a Hamming distance
@@ -22,8 +22,11 @@ enum E_CHAN {
   eChan0 = 0x01,
   eChan1 = 0x02,
   eChan2 = 0x04,
-  eChan3 = 0x07
+  eChan3 = 0x07,
+  eChan4 = 0x08,
+  eChan5 = 0x0C,
+  eChan6 = 0x0E,
+  eChan7 = 0x0F
 };
 
 #endif
-
