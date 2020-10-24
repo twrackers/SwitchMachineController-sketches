@@ -1,4 +1,4 @@
-# SwitchMachineController-sketches
+# SwitchMachineController
 
 The *SwitchMachineController* sketch is written to run on an Adafruit Pro Trinket (5V version), but can be easily customized to work on other Arduino-class boards.  It receives command bytes via I<sup>2</sup>C from a bus controller to control up to 4 KATO Unitrack solenoid-type switch machines.  
 
