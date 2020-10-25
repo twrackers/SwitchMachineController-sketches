@@ -1,7 +1,6 @@
 #include <FIFO.h>
 #include <StateMachine.h>
 #include <SwitchMachine.h>
-#include <Triad.h>
 
 #include "I2CDevice.h"
 #include "Timeout.h"
