@@ -65,7 +65,8 @@ const byte BAD_CHAN = 0xFF;
 // If more than 4 channels are defined, uncomment some of
 // the lines below.  If more than 8 are needed, such as if
 // you're using an Arduino Mega 2560, you will need to
-// assign new values for the eChan* symbols 
+// assign new values for the eChan* symbols in file
+// SwitchMachineCmds.h.
 byte decodeChan(const byte chan)
 {
   return (chan == eChan0) ? 0
