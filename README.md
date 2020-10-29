@@ -1,6 +1,6 @@
-# SwitchMachineController
+# SwitchMachineController #
 
-The *SwitchMachineController* sketch is written to run on an Adafruit Pro Trinket (5V version), but can be easily customized to work on other Arduino-class boards.  It receives command bytes via I<sup>2</sup>C from a bus controller to control up to 4 KATO Unitrack solenoid-type switch machines.  
+The *SwitchMachineController* sketch is written to run on an Adafruit Pro Trinket (5V version), but can be easily customized to work on other Arduino-class boards.  It receives command bytes via I<sup>2</sup>C from a bus controller to control up to 4 KATO UNITRACK solenoid-type switch machines.  
 
 There are four types of commands recognized:
 
@@ -13,12 +13,7 @@ The controller activates switch machines in sequence so that at most one solenoi
 
 ## Installation ##
 
-To install these files:
-
-1. Find where your Arduino IDE stores sketches.  To do this, in the IDE click *File -> Preferences*.  The "Sketchbook location" is what you want.
-2. From the top page of this repository, [https://github.com/twrackers/SwitchMachineController-sketches](https://github.com/twrackers/SwitchMachineController-sketches), click the green `Code` button, then click `Download ZIP`.
-3. Open the downloaded `.zip` file.  You will see a single directory named `SwitchMachineController-sketches-main`.  Do an `Extract all` into your sketchbook directory.
-4. Rename the directory you just created to simply `SwitchMachineController`.  The Arduino IDE requires that the sketch file (`SwitchMachineController.ino`) be located inside a directory of the same name, without the `.ino` part.
+Instructions for installing the *SwitchMachineController* sketch can be found in file `INSTALL.md` in this repository at [https://github.com/twrackers/SwitchMachineController-sketches/blob/main/INSTALL.md](https://github.com/twrackers/SwitchMachineController-sketches/blob/main/INSTALL.md).
 
 ## Dependencies ##
 
@@ -26,4 +21,4 @@ The *SwitchMachineController* sketch uses the following libraries.
 
 - *FIFO* library, [https://github.com/twrackers/FIFO](https://github.com/twrackers/FIFO)
 - *StateMachine* library, [https://github.com/twrackers/StateMachine-library](https://github.com/twrackers/StateMachine-library)
-- *SwitchMachine* library, [https://github.com/twrackers/SwitchMachine-library](https://github.com/twrackers/SwitchMachine-library) (includes `Triad.h`)
+- *SwitchMachine* library, [https://github.com/twrackers/SwitchMachine-library](https://github.com/twrackers/SwitchMachine-library)
