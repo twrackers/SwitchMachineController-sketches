@@ -1,9 +1,9 @@
 #include <Wire.h>
 
-#include "I2CDevice.h"
+#include "I2CPeripheral.h"
 
-// I2CDevice class - Handles device end of I2C link to central processor.
-I2CDevice::I2CDevice(
+// I2CPeripheral class - Handles device end of I2C link to central processor.
+I2CPeripheral::I2CPeripheral(
   const byte addr,      // I2C address of this processor
   CALLBACK1 receive,    // address of onReceive callback
   CALLBACK0 request     // address of onRequest callback
@@ -14,7 +14,7 @@ I2CDevice::I2CDevice(
   Wire.onRequest(request);
 }
 
-void I2CDevice::begin()
+void I2CPeripheral::begin()
 {
   // Begin I2C interface.
   Wire.begin(m_addr);

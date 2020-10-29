@@ -1,21 +1,19 @@
-#ifndef _I2C_DEVICE__H_
-#define _I2C_DEVICE__H_
+#ifndef _I2C_PERIPHERAL__H_
+#define _I2C_PERIPHERAL__H_
 
 #include <Arduino.h>
 #include <Wire.h>
 
-#include "SwitchMachineCmds.h"
-
 typedef void (*CALLBACK0)();
 typedef void (*CALLBACK1)(int);
 
-class I2CDevice
+class I2CPeripheral
 {
   private:
     const byte m_addr;
     
   public:
-    I2CDevice(
+    I2CPeripheral(
       const byte addr,
       CALLBACK1 receive,
       CALLBACK0 request

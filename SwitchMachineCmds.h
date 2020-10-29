@@ -18,6 +18,10 @@ enum E_CMD {
   eReset   = 0x70
 };
 
+// Channel codes also have a Hamming distance
+// of at least 2 bits from each other.
+// For more than 8 channels per device, you
+// will need to assign new codes.
 enum E_CHAN {
   eChan0 = 0x01,
   eChan1 = 0x02,

@@ -2,14 +2,17 @@
 #include <StateMachine.h>
 #include <SwitchMachine.h>
 
-#include "I2CDevice.h"
+#include "I2CPeripheral.h"
+#include "SwitchMachineCmds.h"
 #include "Timeout.h"
 
 #define PRO_TRINKET
 //#define UNO
 
-// Next line must be unique across multiple
-// switch machine controllers.
+// Next line must be unique across all I2C
+// peripherals sharing an I2C bus.  This includes
+// any other switch machine controllers on the bus.
+// Addresses 0x00 through 0x07 are reserved, don't use.
 const byte I2C_ADDR = 0x32;    // I2C address
 
 // All triads are consecutive pins.
@@ -17,23 +20,26 @@ const byte I2C_ADDR = 0x32;    // I2C address
 // in that order.  White is the enable signal for a
 // channel, while red and black match the pair of wires
 // connected to the switch machine.
+// The number of Triads is limited by the number of
+// available GPIO pins on your Arduino-compatible
+// processor.
 
 #if defined(PRO_TRINKET)
 
-const Triad<byte> pins[] = {
-  Triad<byte>(9, 10, 11),
-  Triad<byte>(A0, A1, A2),
-  Triad<byte>(0, 1, 3),
-  Triad<byte>(5, 6, 8)
+const Triad pins[] = {
+  Triad(9, 10, 11),
+  Triad(A0, A1, A2),
+  Triad(0, 1, 3),
+  Triad(5, 6, 8)
 };
 
 #elif defined(UNO)
 
-const Triad<byte> pins[] = {
-  Triad<byte>(A0, A1, A2),
-  Triad<byte>(5, 6, 7),
-  Triad<byte>(8, 9, 10),
-  Triad<byte>(11, 12, 13)
+const Triad pins[] = {
+  Triad(A0, A1, A2),
+  Triad(5, 6, 7),
+  Triad(8, 9, 10),
+  Triad(11, 12, 13)
 };
 
 #else
@@ -44,27 +50,37 @@ const Triad<byte> pins[] = {
 void receiveCallback(int);
 void requestCallback();
 
-I2CDevice i2c(I2C_ADDR, receiveCallback, requestCallback);
+I2CPeripheral i2c(I2C_ADDR, receiveCallback, requestCallback);
 
 const byte NUM_CHANS = sizeof pins / sizeof *pins;
 SwitchMachine* chans[NUM_CHANS];
+
 FIFO cmdBuffer(8);
 FIFO opQueue(8);
+
 Timeout timer;
 
 const byte BAD_CHAN = 0xFF;
 
+// If more than 4 channels are defined, uncomment some of
+// the lines below.  If more than 8 are needed, such as if
+// you're using an Arduino Mega 2560, you will need to
+// assign new values for the eChan* symbols 
 byte decodeChan(const byte chan)
 {
   return (chan == eChan0) ? 0
        : (chan == eChan1) ? 1
        : (chan == eChan2) ? 2
        : (chan == eChan3) ? 3
+//       : (chan == eChan4) ? 4
+//       : (chan == eChan5) ? 5
+//       : (chan == eChan6) ? 6
+//       : (chan == eChan7) ? 7
        : BAD_CHAN;  // channel code not valid
 }
 
 // I2C Receive Handler, called when
-// this I2C device receives bytes from
+// this I2C peripheral receives bytes from
 // the I2C controller.  Is passed the number
 // of bytes in the received I2C transaction
 // (not used, all commands are 1 byte long).
@@ -93,7 +109,7 @@ void decodeAndQueue(const byte cmdByte)
     // Force all four switch machines to match
     // their current states, in case any were
     // switched by hand.
-    for (byte c = 0; c < 4; ++c) {
+    for (byte c = 0; c < NUM_CHANS; ++c) {
       opQueue.push((byte) SwitchMachine::eRefresh | (c << 4));
     }
     
@@ -101,7 +117,7 @@ void decodeAndQueue(const byte cmdByte)
     
     // Reset all four channels to their reset state
     // (main for LH and RH, left for Y, thru for DX).
-    for (byte c = 0; c < 4; ++c) {
+    for (byte c = 0; c < NUM_CHANS; ++c) {
       opQueue.push((byte) SwitchMachine::eMain | (c << 4));
     }
     
@@ -123,19 +139,19 @@ void requestCallback()
 
 void setup()
 {
+  // Create SwitchMachine objects, pausing for 100 msec between.
   for (byte i = 0; i < NUM_CHANS; ++i) {
     chans[i] = new SwitchMachine(pins[i]);
     delay(100);
   }
+  // Start the I2C bus interface.
   i2c.begin();
 }
 
 void loop()
 {
   // Update the SwitchMachine objects.
-  for (byte i = 0; i < NUM_CHANS; ++i) {
-    chans[i]->update();
-  }
+  StateMachine::updateAll(chans, NUM_CHANS);
   
   // Update the Timeout.
   timer.update();
