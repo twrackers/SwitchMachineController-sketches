@@ -1,7 +1,7 @@
 #ifndef _SWITCH_MACHINE_CMDS__H_
 #define _SWITCH_MACHINE_CMDS__H_
 
-// NOTE: A copy of this file also exists under the SwitchMachineController
+// NOTE: A copy of this file also exists under the SwitchMachineTest
 // sketch.  Both must define the same enumerated values.
 
 // The command and channel codes below are bitwise OR'ed together to form
