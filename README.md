@@ -22,3 +22,7 @@ The *SwitchMachineController* sketch uses the following libraries.
 - *FIFO* library, [https://github.com/twrackers/FIFO](https://github.com/twrackers/FIFO)
 - *StateMachine* library, [https://github.com/twrackers/StateMachine-library](https://github.com/twrackers/StateMachine-library)
 - *SwitchMachine* library, [https://github.com/twrackers/SwitchMachine-library](https://github.com/twrackers/SwitchMachine-library)
+
+## To do ##
+
+- Considering adding another command code to trigger the initialization of the outputs.  In the current version, the outputs are set to the *Main* route state in the `setup()` function when the processor powers up.  If there are multiple switch machine controllers on the same power circuit, they will probably try to move their turnouts at about the same time.  This can cause too great a current load on the 12 volt turnout power supply, making switching unreliable.  An "init" command code would be used to delay the initialization of the outputs until each controller is commanded to initialize.
