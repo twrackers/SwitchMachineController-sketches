@@ -140,10 +140,10 @@ void requestCallback()
 
 void setup()
 {
-  // Create SwitchMachine objects, pausing for 100 msec between.
+  // Create SwitchMachine objects, pausing for 200 msec between.
   for (byte i = 0; i < NUM_CHANS; ++i) {
     chans[i] = new SwitchMachine(pins[i]);
-    delay(100);
+    delay(200);
   }
   // Start the I2C bus interface.
   i2c.begin();
@@ -182,6 +182,6 @@ void loop()
     
     // Force minimum delay before another switch
     // machine can be commanded to throw.
-    timer.setTimeout(100);
+    timer.setTimeout(50);
   }
 }
