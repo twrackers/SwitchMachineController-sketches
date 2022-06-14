@@ -37,7 +37,7 @@ const Triad pins[] = {
 };
 const int i2c_ofs_pins[] = { 12, 13, A0 };
 
-#elif ITSYBITSY_32U4
+#elif defined(ITSYBITSY_32U4)
 
 const Triad pins[] = {
   Triad(A0, A1, A2),
@@ -161,9 +161,9 @@ void setup()
     delay(200);
   }
   // Get I2C address offset from I/O pins.
-  BitIO i2c_addr_ofs(i2c_addr_pins, DIM(i2c_addr_pins));
+  BitIO i2c_addr_ofs(i2c_ofs_pins, DIM(i2c_ofs_pins));
   // Start the I2C bus interface as peripheral with actual address.
-  i2c.begin(I2C_BASE_ADDR + i2c_addr_ofs.read());
+  i2c.begin(I2C_BASE_ADDR + i2c_addr_ofs.readByte());
 }
 
 void loop()
