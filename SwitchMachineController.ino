@@ -7,6 +7,7 @@
 #include "Timeout.h"
 
 #define PRO_TRINKET
+//#define ITSYBITSY_32U4
 //#define UNO
 
 // Next line must be unique across all I2C
@@ -33,6 +34,15 @@ const Triad pins[] = {
   Triad(5, 6, 8)
 };
 
+#elif ITSYBITSY_32U4
+
+const Triad pins[] = {
+  Triad(A0, A1, A2),
+  Triad(A3, A4, A5),
+  Triad(7, 9, 10),
+  Triad(11, 12, 13)
+};
+
 #elif defined(UNO)
 
 const Triad pins[] = {
@@ -43,7 +53,7 @@ const Triad pins[] = {
 };
 
 #else
-#error Must define either PRO_TRINKET or UNO
+#error Must define either PRO_TRINKET, ITSYBITSY_32U4, or UNO
 #endif
 
 // Forward reference to I2C handlers.
