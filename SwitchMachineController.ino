@@ -1,3 +1,4 @@
+#include <BitIO.h>
 #include <FIFO.h>
 #include <StateMachine.h>
 #include <SwitchMachine.h>
@@ -10,11 +11,12 @@
 //#define ITSYBITSY_32U4
 //#define UNO
 
-// Next line must be unique across all I2C
-// peripherals sharing an I2C bus.  This includes
-// any other switch machine controllers on the bus.
+// I2C addresses of peripherals sharing a bus must
+// be unique.  This device's address will be the base
+// address below plus an offset read from an ordered set
+// of GPIO pins.
 // Addresses 0x00 through 0x07 are reserved, don't use.
-const byte I2C_ADDR = 0x32;    // I2C address
+const int I2C_BASE_ADDR = 0x30;    // I2C base address
 
 // All triads are consecutive pins.
 // The pins should be connected to white/red/black
@@ -29,10 +31,11 @@ const byte I2C_ADDR = 0x32;    // I2C address
 
 const Triad pins[] = {
   Triad(9, 10, 11),
-  Triad(A0, A1, A2),
+  Triad(A1, A2, A3),
   Triad(0, 1, 3),
   Triad(5, 6, 8)
 };
+const int i2c_ofs_pins[] = { 12, 13, A0 };
 
 #elif ITSYBITSY_32U4
 
@@ -42,6 +45,7 @@ const Triad pins[] = {
   Triad(7, 9, 10),
   Triad(11, 12, 13)
 };
+const int i2c_ofs_pins[] = { 8, 6, 4, 5 };
 
 #elif defined(UNO)
 
@@ -51,6 +55,7 @@ const Triad pins[] = {
   Triad(8, 9, 10),
   Triad(11, 12, 13)
 };
+const int i2c_ofs_pins[] = { A3, 2, 3 };
 
 #else
 #error Must define either PRO_TRINKET, ITSYBITSY_32U4, or UNO
@@ -60,7 +65,7 @@ const Triad pins[] = {
 void receiveCallback(int);
 void requestCallback();
 
-I2CPeripheral i2c(I2C_ADDR, receiveCallback, requestCallback);
+I2CPeripheral i2c(receiveCallback, requestCallback);
 
 const byte NUM_CHANS = sizeof pins / sizeof *pins;
 SwitchMachine* chans[NUM_CHANS];
@@ -155,8 +160,10 @@ void setup()
     chans[i] = new SwitchMachine(pins[i]);
     delay(200);
   }
-  // Start the I2C bus interface.
-  i2c.begin();
+  // Get I2C address offset from I/O pins.
+  BitIO i2c_addr_ofs(i2c_addr_pins, DIM(i2c_addr_pins));
+  // Start the I2C bus interface as peripheral with actual address.
+  i2c.begin(I2C_BASE_ADDR + i2c_addr_ofs.read());
 }
 
 void loop()
@@ -192,6 +199,6 @@ void loop()
     
     // Force minimum delay before another switch
     // machine can be commanded to throw.
-    timer.setTimeout(50);
+    timer.setTimeout(30);
   }
 }
