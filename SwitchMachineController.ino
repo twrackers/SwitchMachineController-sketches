@@ -164,10 +164,9 @@ void requestCallback()
 
 void setup()
 {
-  // Create SwitchMachine objects, pausing for 200 msec between.
+  // Create SwitchMachine objects.
   for (byte i = 0; i < NUM_CHANS; ++i) {
     chans[i] = new SwitchMachine(pins[i]);
-    delay(200);
   }
   // Get I2C address offset from I/O pins.
   BitIO i2c_addr_ofs(i2c_ofs_pins, DIM(i2c_ofs_pins));
