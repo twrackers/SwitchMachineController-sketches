@@ -47,15 +47,6 @@ const Triad pins[] = {
 };
 const int i2c_ofs_pins[] = { 8, 6, 4, 5 };
 
-#elif ITSYBITSY_32U4
-
-const Triad pins[] = {
-  Triad(A0, A1, A2),
-  Triad(A3, A4, A5),
-  Triad(7, 9, 10),
-  Triad(11, 12, 13)
-};
-
 #elif defined(UNO)
 
 const Triad pins[] = {
