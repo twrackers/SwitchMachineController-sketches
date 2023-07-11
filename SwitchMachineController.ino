@@ -7,9 +7,10 @@
 #include "SwitchMachineCmds.h"
 #include "Timeout.h"
 
-#define PRO_TRINKET
+//#define PRO_TRINKET
 //#define ITSYBITSY_32U4
-//#define UNO
+#define ARDUINO_MICRO
+//#define ARDUINO_UNO
 
 // I2C addresses of peripherals sharing a bus must
 // be unique.  This device's address will be the base
@@ -47,7 +48,17 @@ const Triad pins[] = {
 };
 const int i2c_ofs_pins[] = { 8, 6, 4, 5 };
 
-#elif defined(UNO)
+#elif defined(ARDUINO_MICRO)
+
+const Triad pins[] = {
+  Triad(2, 3, 4),
+  Triad(5, 6, 7),
+  Triad(A0, A1, A2),
+  Triad(A3, A4, A5)
+};
+const int i2c_ofs_pins[] = { 10, 11, 12 };
+
+#elif defined(ARDUINO_UNO)
 
 const Triad pins[] = {
   Triad(A0, A1, A2),
@@ -58,7 +69,7 @@ const Triad pins[] = {
 const int i2c_ofs_pins[] = { A3, 2, 3 };
 
 #else
-#error Must define either PRO_TRINKET, ITSYBITSY_32U4, or UNO
+#error Must define either PRO_TRINKET, ITSYBITSY_32U4, ARDUINO_MICRO, or ARDUINO_UNO
 #endif
 
 // Forward reference to I2C handlers.
@@ -122,7 +133,7 @@ void decodeAndQueue(const byte cmdByte)
   // if command is valid.
   if (cmd == eRefresh) {
     
-    // Force all four switch machines to match
+    // Force all switch machines to match
     // their current states, in case any were
     // switched by hand.
     for (byte c = 0; c < NUM_CHANS; ++c) {
@@ -131,7 +142,7 @@ void decodeAndQueue(const byte cmdByte)
     
   } else if (cmd == eReset) {
     
-    // Reset all four channels to their reset state
+    // Reset all channels to their reset state
     // (main for LH and RH, left for Y, thru for DX).
     for (byte c = 0; c < NUM_CHANS; ++c) {
       opQueue.push((byte) SwitchMachine::eMain | (c << 4));
@@ -150,7 +161,7 @@ void decodeAndQueue(const byte cmdByte)
 
 void requestCallback()
 {
-  // no op  
+  // no op
 }
 
 void setup()
