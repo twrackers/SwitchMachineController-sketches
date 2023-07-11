@@ -51,12 +51,12 @@ const int i2c_ofs_pins[] = { 8, 6, 4, 5 };
 #elif defined(ARDUINO_MICRO)
 
 const Triad pins[] = {
-  Triad(2, 3, 4),
   Triad(5, 6, 7),
+  Triad(8, 9, 10),
   Triad(A0, A1, A2),
   Triad(A3, A4, A5)
 };
-const int i2c_ofs_pins[] = { 10, 11, 12 };
+const int i2c_ofs_pins[] = { 11, 12 };
 
 #elif defined(ARDUINO_UNO)
 
