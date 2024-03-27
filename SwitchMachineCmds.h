@@ -15,7 +15,7 @@
 // of at least 2 bits from all other codes.
 // Additional codes which would meet this
 // criterion are (using only high 4 bits):
-//   0x80  0xC0  0xE0  0xF0
+//   0x80  0xB0  0xD0  0xE0
 
 enum E_CMD {
   eRefresh = 0x10,
@@ -33,9 +33,9 @@ enum E_CHAN {
   eChan2 = 0x04,
   eChan3 = 0x07,
   eChan4 = 0x08,
-  eChan5 = 0x0C,
-  eChan6 = 0x0E,
-  eChan7 = 0x0F
+  eChan5 = 0x0B,
+  eChan6 = 0x0D,
+  eChan7 = 0x0E
 };
 
 #endif
