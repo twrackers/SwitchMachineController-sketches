@@ -7,9 +7,12 @@
 #include "SwitchMachineCmds.h"
 #include "Timeout.h"
 
+#define LOGGING 0
+
 //#define PRO_TRINKET
 //#define ITSYBITSY_32U4
-#define ARDUINO_MICRO
+#define METRO_MINI
+//#define ARDUINO_MICRO
 //#define ARDUINO_UNO
 
 // I2C addresses of peripherals sharing a bus must
@@ -48,6 +51,16 @@ const Triad pins[] = {
 };
 const int i2c_ofs_pins[] = { 8, 6, 4, 5 };
 
+#elif defined(METRO_MINI)
+
+const Triad pins[] = {
+  Triad(14, 15, 16),
+  Triad(2, 3, 4),
+  Triad(5, 6, 7),
+  Triad(8, 9, 10)
+};
+const int i2c_ofs_pins[] = { 17, 11, 12 };
+
 #elif defined(ARDUINO_MICRO)
 
 const Triad pins[] = {
@@ -69,7 +82,7 @@ const Triad pins[] = {
 const int i2c_ofs_pins[] = { A3, 2, 3 };
 
 #else
-#error Must define either PRO_TRINKET, ITSYBITSY_32U4, ARDUINO_MICRO, or ARDUINO_UNO
+#error Must define either PRO_TRINKET, ITSYBITSY_32U4, METRO_MINI, ARDUINO_MICRO, or ARDUINO_UNO
 #endif
 
 // Forward reference to I2C handlers.
@@ -132,7 +145,10 @@ void decodeAndQueue(const byte cmdByte)
   // Decode commands, and queue up operation
   // if command is valid.
   if (cmd == eRefresh) {
-    
+
+#if LOGGING > 2
+    Serial.println("REFRESH");
+#endif
     // Force all switch machines to match
     // their current states, in case any were
     // switched by hand.
@@ -142,18 +158,28 @@ void decodeAndQueue(const byte cmdByte)
     
   } else if (cmd == eReset) {
     
+#if LOGGING > 2
+    Serial.println("RESET");
+#endif
     // Reset all channels to their reset state
     // (main for LH and RH, left for Y, thru for DX).
     for (byte c = 0; c < NUM_CHANS; ++c) {
       opQueue.push((byte) SwitchMachine::eMain | (c << 4));
     }
+
+  } else {
     
-  } else if (chan != BAD_CHAN) {
+#if LOGGING > 2
+    Serial.println("MAIN|DIV");
+#endif
+    if (chan != BAD_CHAN) {
     
-    if (cmd == eMain) {
-      opQueue.push((byte) SwitchMachine::eMain | (chan << 4));
-    } else if (cmd == eDiv) {
-      opQueue.push((byte) SwitchMachine::eDiverging | (chan << 4));
+      if (cmd == eMain) {
+        opQueue.push((byte) SwitchMachine::eMain | (chan << 4));
+      } else if (cmd == eDiv) {
+        opQueue.push((byte) SwitchMachine::eDiverging | (chan << 4));
+      }
+
     }
     
   }
@@ -174,6 +200,18 @@ void setup()
   BitIO i2c_addr_ofs(i2c_ofs_pins, DIM(i2c_ofs_pins));
   // Start the I2C bus interface as peripheral with actual address.
   i2c.begin(I2C_BASE_ADDR + i2c_addr_ofs.readByte());
+
+#if LOGGING
+  Serial.begin(115200);
+  pinMode(LED_BUILTIN, OUTPUT);
+  while (!Serial) {
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(50);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(50);
+  }
+  digitalWrite(LED_BUILTIN, LOW);
+#endif
 }
 
 void loop()
@@ -187,7 +225,11 @@ void loop()
   // If there are any received commands buffered,
   // process the one at the front of the buffer.
   if (!cmdBuffer.isEmpty()) {
-    decodeAndQueue(cmdBuffer.pop());
+    byte cmd = cmdBuffer.pop();
+#if LOGGING > 1
+    Serial.println(cmd, HEX);
+#endif
+    decodeAndQueue(cmd);
   }
   
   // If enough time has passed and there are any
@@ -203,6 +245,13 @@ void loop()
     
     // The operation is in the low 4 bits.
     op &= 0x0F;
+
+#if LOGGING > 0
+    const char* ops[] = {"refresh", "main", "div", "ERR"};
+    Serial.print(ops[op]);
+    Serial.print(" @ ");
+    Serial.println(chan);
+#endif
     
     // Command the switch machine to throw.
     chans[chan]->throwPoints(static_cast<SwitchMachine::E_DIR>(op));
